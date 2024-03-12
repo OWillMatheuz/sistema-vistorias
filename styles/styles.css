@@ -1,0 +1,100 @@
+:root {
+  --background-color: black;
+  --text-color: white;
+  --submit-button-background: #4caf50;
+  --submit-button-hover: #45a049;
+  --delete-button-background: #ff0000;
+  --delete-button-hover: #cc0000;
+  --export-button-background: #00cc00;
+  --export-button-hover: #009900;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type="submit"] {
+  background-color: var(--submit-button-background);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: var(--submit-button-hover);
+}
+
+#somaTotal {
+  margin-top: 20px;
+}
+
+#somaTotal h2 {
+  margin-bottom: 5px;
+}
+
+#historico li {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  gap: 6px;
+}
+
+#apagarTudo {
+  background-color: var(--delete-button-background);
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#apagarTudo:hover {
+  background-color: var(--delete-button-hover);
+}
+
+#exportarPDF {
+  background-color: var(--export-button-background);
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#exportarPDF:hover {
+  background-color: var(--export-button-hover);
+}
+
+
