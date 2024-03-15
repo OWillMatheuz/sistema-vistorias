@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const historicoList = document.getElementById("historico");
   const apagarTudoButton = document.getElementById("apagarTudo");
   const exportarPDFButton = document.getElementById("exportarPDF");
+  const totalValorVistoriasElement = document.getElementById("totalValorVistorias"); // Novo elemento para exibir o valor total
 
   // Evento de envio do formulário
   form.addEventListener("submit", function (event) {
@@ -70,8 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     // Obtém o histórico atual do armazenamento local ou inicializa um array vazio
-    var historico =
-      JSON.parse(localStorage.getItem("historicoVistorias")) || [];
+    var historico = JSON.parse(localStorage.getItem("historicoVistorias")) || [];
     // Adiciona a nova vistoria ao histórico
     historico.push(vistoria);
     // Salva o histórico atualizado no armazenamento local
@@ -81,10 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
   // Função para exibir o histórico de vistorias
   function exibirHistorico() {
     // Obtém o histórico do armazenamento local ou inicializa um array vazio
-    var historico =
-      JSON.parse(localStorage.getItem("historicoVistorias")) || [];
+    var historico = JSON.parse(localStorage.getItem("historicoVistorias")) || [];
     // Limpa a lista de histórico atual
     historicoList.innerHTML = "";
+
+    let totalValorVistorias = 0; // Inicializa o valor total como zero
 
     // Para cada vistoria no histórico, cria elementos HTML correspondentes e os adiciona à lista
     historico.forEach(function (vistoria, index) {
@@ -143,7 +144,13 @@ document.addEventListener("DOMContentLoaded", function () {
       listItem.appendChild(deleteButton);
 
       historicoList.appendChild(listItem);
+
+      // Atualiza o valor total somando o valor desta vistoria
+      totalValorVistorias += parseFloat(vistoria.soma);
     });
+
+    // Exibe o valor total formatado na interface
+    totalValorVistoriasElement.textContent = "Valor Total de Vistorias: R$ " + totalValorVistorias.toFixed(2);
   }
 
   // Evento de clique no botão "Apagar Tudo"
@@ -163,40 +170,52 @@ document.addEventListener("DOMContentLoaded", function () {
     exportarParaPDF();
   });
 
-  // Função para exportar o histórico para PDF
-  function exportarParaPDF() {
-    // Obtém todos os elementos de texto que serão exportados para PDF
-    const textElements = document.querySelectorAll("#historico .black-text");
+ // Função para exportar o histórico para PDF
+function exportarParaPDF() {
+  // Obtém todos os elementos de texto que serão exportados para PDF
+  const textElements = document.querySelectorAll("#historico .black-text");
+  const totalValorVistoriasElement = document.getElementById("totalValorVistorias");
 
-    // Armazena as propriedades de estilo atuais dos elementos de texto
-    const originalStyles = [];
-    textElements.forEach(function (element) {
-      originalStyles.push({
-        element: element,
-        color: element.style.color,
-      });
+  // Armazena as propriedades de estilo atuais dos elementos de texto
+  const originalStyles = [];
+  textElements.forEach(function (element) {
+    originalStyles.push({
+      element: element,
+      color: element.style.color,
     });
+  });
 
-    // Define a cor do texto como preto para todos os elementos de texto
-    textElements.forEach(function (element) {
-      element.style.color = "black";
-    });
+  // Define a cor do texto como preto para todos os elementos de texto
+  textElements.forEach(function (element) {
+    element.style.color = "black"; // Define a cor do texto como preto
+  });
 
-    // Cria um elemento HTML temporário para armazenar o histórico
-    const historicoHTML = document.createElement("div");
-    historicoHTML.appendChild(historicoList.cloneNode(true));
+  // Define a cor do texto como preto para o elemento do valor total
+  totalValorVistoriasElement.style.color = "black";
 
-    // Define o nome do arquivo PDF
-    const filename = "historico_vistorias.pdf";
+  // Cria um elemento HTML temporário para armazenar o histórico
+  const historicoHTML = document.createElement("div");
+  historicoHTML.appendChild(historicoList.cloneNode(true));
+  
+  // Adiciona o valor total ao HTML temporário
+  historicoHTML.appendChild(totalValorVistoriasElement.cloneNode(true));
 
-    // Converte o HTML para PDF e salva o arquivo
-    html2pdf().from(historicoHTML).save(filename);
+  // Define o nome do arquivo PDF
+  const filename = "historico_vistorias.pdf";
 
-    // Restaura as propriedades de estilo originais dos elementos de texto
-    originalStyles.forEach(function (style) {
-      style.element.style.color = style.color;
-    });
-  }
+  // Converte o HTML para PDF e salva o arquivo
+  html2pdf().from(historicoHTML).save(filename);
+
+  // Restaura as propriedades de estilo originais dos elementos de texto
+  originalStyles.forEach(function (style) {
+    style.element.style.color = style.color;
+  });
+
+  // Restaura a cor original do valor total
+  totalValorVistoriasElement.style.color = ""; // Retorna ao estilo original
+}
+
+
 
   // Função para formatar a data no formato "dd/mm/aaaa"
   function formatarData(data) {
